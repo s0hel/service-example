@@ -1,0 +1,27 @@
+version: '3.9'
+
+services:
+  db:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: service-demo
+    ports:
+      - "3306:3306"
+    expose:
+      - 3306
+  api:
+    build: .
+    depends_on:
+      - db
+    ports:
+      - "8080:8080"
+    expose:
+      - 8080
+    links:
+      - db:db
+    environment:
+      - database.driverClassName=com.mysql.cj.jdbc.Driver
+      - database.url=jdbc:mysql://db:3306/service-demo
+      - database.username=root
+      - database.password=root
